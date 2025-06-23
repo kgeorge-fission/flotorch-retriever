@@ -139,7 +139,7 @@ class RetrieverProcessor(BaseFargateTaskProcessor):
 
             inferencer = InferencerProviderFactory.create_inferencer_provider(
                 exp_config_data.get("gateway_enabled", False),
-                f'{exp_config_data.get("gateway_url", "")}/api/openai/v1',
+                f'{exp_config_data.get("gateway_url", "")}/openai/v1',
                 exp_config_data.get("gateway_api_key", ""),
                 exp_config_data.get("retrieval_service"),
                 exp_config_data.get("retrieval_model"), 
