@@ -111,8 +111,8 @@ class RetrieverProcessor(BaseFargateTaskProcessor):
                 if isinstance(kb_id_list, list) and kb_id_list:
                     knowledge_base_id = kb_id_list[0]
             vector_storage = VectorStorageFactory.create_vector_storage(
-                knowledge_base=exp_config_data.get("knowledge_base", False),
-                use_bedrock_kb=exp_config_data.get("bedrock_knowledge_base", False),
+                knowledge_base=bool(exp_config_data.get("vectorstore")),
+                use_bedrock_kb=bool(exp_config_data.get("vectorstore")),
                 embedding=embedding,
                 opensearch_host=config.get_opensearch_host() if is_opensearch_required else None,
                 opensearch_port=config.get_opensearch_port() if is_opensearch_required else None,
