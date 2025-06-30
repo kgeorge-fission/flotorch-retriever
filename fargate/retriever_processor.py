@@ -39,7 +39,70 @@ class RetrieverProcessor(BaseFargateTaskProcessor):
     def process(self):
         logger.info("Starting retriever process.")
         try:
-            exp_config_data = self.input_data
+            # exp_config_data = self.input_data
+            exp_config_data = {
+                "experiment_id": "I52W6CPG",
+                "execution_id": "HWQME",
+                "bedrock_knowledge_base": True,
+                "chunking_strategy": "",
+                "chunk_overlap": 0,
+                "chunk_size": 0,
+                "directional_pricing": 0.36,
+                "embedding_model": "",
+                "embedding_service": "",
+                "enable_context_guardrails": False,
+                "enable_guardrails": False,
+                "enable_prompt_guardrails": False,
+                "enable_response_guardrails": False,
+                "eval_cost_estimate": 0.27819306666666666,
+                "eval_embedding_model": "amazon.titan-embed-image-v1",
+                "eval_retrieval_model": "cohere.command-r-v1:0",
+                "eval_service": "ragas",
+                "gateway_api_key": "",
+                "gateway_enabled": False,
+                "gateway_url": "",
+                "gt_data": "s3://flotorch-data-teseot/d5c529e3-b851-42ad-a89d-6de377b35982/gt_data/gt.json",
+                "guardrail_id": "",
+                "guardrail_name": "",
+                "guardrail_version": "",
+                "hierarchical_child_chunk_size": 0,
+                "hierarchical_chunk_overlap_percentage": 0,
+                "hierarchical_parent_chunk_size": 0,
+                "indexing_algorithm": "",
+                "indexing_cost_estimate": 0,
+                "inferencing_cost_estimate": 0.048400000000000006,
+                "is_opensearch": False,
+                "kb_data": "SS317XLNBJ",
+                "kb_name": "knowledge-base-Amazonbedrock",
+                "knn_num": 3,
+                "knowledge_base": True,
+                "n_shot_prompts": 1,
+                "n_shot_prompt_guide": {
+                "examples": [
+                    {
+                    "answer": "Amazon Bedrock IDE within Amazon SageMaker Unified Studio is bound by the same SLAs as Amazon Bedrock. For more information, visit the Amazon Bedrock Service Level Agreement page.",
+                    "question": "What are the Service Level Agreements (SLAs) for Amazon Bedrock IDE?"
+                    },
+                    {
+                    "answer": "To facilitate a smooth onboarding experience with Amazon Bedrock IDE in Amazon SageMaker Unified Studio, you can find detailed documentation on the Amazon Bedrock IDE User Guide. If you have any additional questions or need further assistance, please don't hesitate to reach out to your AWS account team.",
+                    "question": "What documentation and support resources are available for Amazon Bedrock IDE?"
+                    },
+                    {
+                    "answer": "Amazon Bedrock IDE comes at no extra cost, and users only pay for the usage of the underlying resources that are required by the generative AI applications that they build. For example, customers will only pay for the associated model, Guardrail and Knowledge Base that they have used on their generative AI application. For more information, please visit the Amazon Bedrock pricing page.",
+                    "question": "What are the pricing and billing models for using Amazon Bedrock IDE?"
+                    }
+                ],
+                "system_prompt": "You are an expert AI researcher specializing in cloud computing and AWS services, particularly Amazon Bedrock. Your task is to extract information from the provided Amazon Bedrock PDF and generate precise, structured, and concise answers to user questions. Ensure each response is specific, directly relevant to the question, and clearly reflects the content of the document. If the information is not found in the provided context, respond only with 'The information is not available in the provided context.'",
+                "user_prompt": "Based on the above retrieved context, answer the following question clearly and concisely, avoiding repetition:"
+                },
+                "region": "us-east-1",
+                "rerank_model_id": "none",
+                "retrieval_cost_estimate": 0.015798400000000004,
+                "retrieval_model": "meta-textgeneration-llama-3-1-8b-instruct",
+                "retrieval_service": "sagemaker",
+                "temp_retrieval_llm": 0.3,
+                "vector_dimension": 0
+                }
 
             n_shot_prompt_guide_obj = get_n_shot_prompt_guide_obj(exp_config_data.get("execution_id"))
             exp_config_data["n_shot_prompt_guide_obj"] = n_shot_prompt_guide_obj
@@ -160,7 +223,7 @@ def get_n_shot_prompt_guide_obj(execution_id) -> Optional[Dict]:
     db = DynamoDB(config.get_execution_table_name())
     data = db.read({"id": execution_id})
     if data:
-        n_shot_prompt_guide_obj = data.get("config", {}).get("n_shot_prompt_guide", None)
+        n_shot_prompt_guide_obj = data[0].get("config", {}).get("n_shot_prompt_guide", None)
         return n_shot_prompt_guide_obj
     return None
 
